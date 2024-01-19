@@ -1,0 +1,50 @@
+.app-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100vh;
+    padding: 20px;
+}
+
+.teacher-image img {
+    max-width: 300px; /* Adjust the size as needed */
+    border-radius: 50%; /* Circular image */
+    margin-right: 20px; /* Spacing between the image and chat container */
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1; /* Take up remaining space */
+}
+
+.chat-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    background-color: #f9f9f9;
+}
+
+.chat-messages {
+    height: 300px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    padding: 10px;
+}
+
+.chat-input button {
+    padding: 10px 20px;
+}
