@@ -1,15 +1,15 @@
 .app-container {
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    flex-direction: column; /* Change to column layout for small screens */
+    align-items: center; /* Center items for small screens */
     height: 100vh;
     padding: 20px;
 }
 
 .teacher-image img {
-    max-width: 300px; /* Adjust the size as needed */
-    border-radius: 50%; /* Circular image */
-    margin-right: 20px; /* Spacing between the image and chat container */
+    max-width: 100%; /* Ensure image is not larger than its container */
+    border-radius: 50%;
+    margin-bottom: 20px; /* Adjust margin for small screens */
 }
 
 .chat-container {
@@ -17,14 +17,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-grow: 1; /* Take up remaining space */
+    width: 100%; /* Full width on small screens */
 }
 
 .chat-box {
     border: 1px solid #ccc;
     padding: 20px;
     width: 100%;
-    max-width: 600px;
+    max-width: 600px; /* Maximum width, but allow smaller widths */
     background-color: #f9f9f9;
 }
 
@@ -47,4 +47,25 @@
 
 .chat-input button {
     padding: 10px 20px;
+}
+
+/* Media Query for screens smaller than 600px */
+@media (max-width: 600px) {
+    .app-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .teacher-image img {
+        max-width: 50%; /* Smaller image on mobile */
+        margin-bottom: 20px;
+    }
+
+    .chat-box {
+        width: 90%; /* More width for chat box on smaller screens */
+    }
+
+    .chat-input button {
+        width: 100%; /* Full width button for easier access */
+    }
 }
