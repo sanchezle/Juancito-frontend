@@ -9,7 +9,7 @@ function ChatApp() {
     const sendMessage = async () => {
         try {
             const response = await axios.post(' https://juancito-2c358334bc47.herokuapp.com/juancito', { message: inputText });
-            setMessages([...messages, { user: 'You', text: inputText }, { user: 'Bot', text: response.data.response }]);
+            setMessages([...messages, { user: 'You', text: inputText }, { user: 'juancito', text: response.data.response }]);
         } catch (error) {
             console.error('Error:', error);
             // Optionally handle the error in the UI
