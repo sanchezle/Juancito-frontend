@@ -10,7 +10,7 @@ function ChatApp() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userDataResponse = await axios.get('http://localhost:3000/userData');
+                const userDataResponse = await axios.get('https://juancito-node-7edb1ddade3b.herokuapp.com/userData');
                 setUser(userDataResponse.data);
                 // Add a greeting message with the user's name
                 setMessages([{ user: 'Juancito', text: `Hola ${userDataResponse.data.name}, ¿cómo puedo ayudarte a aprender español hoy?` }]);
@@ -24,7 +24,7 @@ function ChatApp() {
 
         const fetchInitialMessage = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/initialMessage');
+                const response = await axios.get('https://juancito-node-7edb1ddade3b.herokuapp.com/initialMessage');
                 setMessages([{ user: 'Juancito', text: response.data.response }]);
             } catch (error) {
                 console.error('Error fetching initial message:', error);
@@ -50,7 +50,7 @@ function ChatApp() {
                 setMessages([...messages, newMessage]);
             }
     
-            const response = await axios.post('http://localhost:3000/juancito', { message: inputText });
+            const response = await axios.post('https://juancito-node-7edb1ddade3b.herokuapp.com/juancito', { message: inputText });
             setMessages(prev => [...prev, { user: 'Juancito', text: response.data.response }]);
         } catch (error) {
             console.error('Error:', error);

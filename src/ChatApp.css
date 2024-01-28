@@ -9,7 +9,7 @@
     background-color: #3038387c; /* Default grey background, easy to change */
     display: flex;
     justify-content: center;
-    align-items: start; /* Align items to the top */
+    align-items: flex-start; /* Align items to the top */
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1)
 }
