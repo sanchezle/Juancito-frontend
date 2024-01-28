@@ -1,71 +1,163 @@
 .app-container {
     display: flex;
-    flex-direction: column; /* Change to column layout for small screens */
-    align-items: center; /* Center items for small screens */
     height: 100vh;
-    padding: 20px;
+    padding: 0; /* Remove padding to align the column to the edge */
 }
 
-.teacher-image img {
-    max-width: 100%; /* Ensure image is not larger than its container */
-    border-radius: 50%;
-    margin-bottom: 20px; /* Adjust margin for small screens */
-}
-
-.chat-container {
+.teacher-image {
+    flex: 0 0 400px; /* Fixed width for the column */
+    background-color: #3038387c; /* Default grey background, easy to change */
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    width: 100%; /* Full width on small screens */
+    align-items: start; /* Align items to the top */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1)
+}
+.teacher-image img {
+    width: 96%; /* Adjust the width as needed */
+    max-width: 400x; /* Adjust the maximum width as needed */
+    height: auto; /* Maintain the aspect ratio of the image */
+    border-radius: 50%;
+    margin-top: 20px; /* Margin at the top */
+}
+.teacher-title {
+    position:absolute;
+    top: 450px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 3em;
 }
 
 .chat-box {
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     padding: 20px;
-    width: 100%;
-    max-width: 600px; /* Maximum width, but allow smaller widths */
+    width: 60%; /* Set the width to 40% of the screen */
+    max-width: 1200px; /* You can adjust or remove this as needed */
     background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Modern box-shadow for depth */
+    border-radius: 10px; /* Rounded corners */
+    margin: 20px; /* Add some margin */
+    overflow: hidden; /* Ensures the box maintains its shape */
+    display: flex;
+    flex-direction: column; 
+    padding-bottom: 2px;
+    height: 600px; /* Example fixed height, adjust as needed */
+    overflow: hidden; /* Hides any overflowing content */
+
+    
+}
+.chat-messages {
+    flex-grow: 1; /* Allows this area to expand to fill available space */
+    overflow-y: auto; /* Ensures a scrollbar for overflow */
+    max-height: 600px; /* ... existing styles ... */
 }
 
-.chat-messages {
-    height: 300px;
-    overflow-y: auto;
-    margin-bottom: 10px;
+.chat-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: flex-start; /* Align to the top */
+    width: 100%;
 }
+
+/* Rest of your CSS stays the same */
+
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
 
 .chat-input {
     display: flex;
     gap: 10px;
-    width: 100%;
+    width: 100%; /* Ensures the input area takes full width of the container */
+    padding: 10px; /* Add some padding for visual comfort */
+    height: 50px;
 }
 
 .chat-input input {
-    flex-grow: 1;
+    flex-grow: 1; /* Allows the input to expand and fill the available space */
     padding: 10px;
+    border: 1px solid #ccc; /* Add a border for better visibility */
+    border-radius: 4px; /* Optional: rounded corners for a modern look */
+
 }
 
 .chat-input button {
     padding: 10px 20px;
+    border: 1px solid #ccc; /* Consistent border with the input */
+    border-radius: 4px; /* Optional: rounded corners */
+    background-color: #f0f0f0; /* Optional: background color */
+    cursor: pointer; /* Changes the cursor on hover */
 }
-
-/* Media Query for screens smaller than 600px */
-@media (max-width: 600px) {
+        
+/* Media Query for screens smaller than 768px */
+@media (max-width: 768px) {
     .app-container {
         flex-direction: column;
-        align-items: center;
+        align-items: center; /* Center align items for smaller screens */
+    }
+    /* Hide the title on smaller screens */
+ 
+    .teacher-title {
+        display: none;
+    }
+
+    .teacher-image {
+        flex: 0 0 auto; /* Adjust the size to auto */
+        width: 90%; /* Ensure full width of container */
+        height: 220px; /* Double the height of the teacher's box */
+        order: -1; /* Place it at the top */
+        justify-content: center;
+        padding: 2px;
+        
     }
 
     .teacher-image img {
-        max-width: 50%; /* Smaller image on mobile */
-        margin-bottom: 20px;
+        width: 180px; /* Make image four times larger */
+        height: auto; /* Maintain aspect ratio */
+        border-radius: 50%;
+        margin-right: 10px; /* Margin between image and title */
+    }
+
+    .teacher-image::after {
+        content: '  Juancito';
+        display: block; /* Ensure it's on a new line */
+        font-size: 2em; /* Adjust font size */
+        margin-top: 10px; /* Space above the title */
     }
 
     .chat-box {
-        width: 90%; /* More width for chat box on smaller screens */
+        width: 80%; /* Ensure it does not exceed screen width */
+        max-width: 80%; /* Maximum width is 100% of screen */
+        height: 75%; /* Subtract the height of teacher's box plus some margin */
+        overflow: hidden;
     }
 
-    .chat-input button {
-        width: 100%; /* Full width button for easier access */
+    .chat-messages {
+        flex-grow: 1;
+        overflow-y: auto;
     }
+
+    .chat-input {
+        width: 100%;
+    }
+    .user-info {
+        display: none; /* Hide user-info on smaller screens */
+    };
+
+    
+}
+
+/* Additional Media Query for mobile phones */
+@media (max-width: 480px) {
+    /* You can make further adjustments here for mobile phones if needed */
 }
