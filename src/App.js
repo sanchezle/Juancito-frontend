@@ -6,11 +6,12 @@ function ChatApp() {
     const [messages, setMessages] = useState([]);
     const [inputText, setInputText] = useState('');
     const [user, setUser] = useState({}); // State for storing user data
+    const [context, setContext] = useState([]); // Context for chat history
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userDataResponse = await axios.get('https://juancito-node-7edb1ddade3b.herokuapp.com/userData');
+                const userDataResponse = await axios.get('https://yourusername.pythonanywhere.com/userData');
                 setUser(userDataResponse.data);
                 // Add a greeting message with the user's name
                 setMessages([{ user: 'Juancito', text: `Hola ${userDataResponse.data.name}, ¿cómo puedo ayudarte a aprender español hoy?` }]);
@@ -21,10 +22,9 @@ function ChatApp() {
 
         fetchUserData();
 
-
         const fetchInitialMessage = async () => {
             try {
-                const response = await axios.get('https://juancito-node-7edb1ddade3b.herokuapp.com/initialMessage');
+                const response = await axios.get('https://yourusername.pythonanywhere.com/initialMessage');
                 setMessages([{ user: 'Juancito', text: response.data.response }]);
             } catch (error) {
                 console.error('Error fetching initial message:', error);
@@ -49,32 +49,35 @@ function ChatApp() {
             } else {
                 setMessages([...messages, newMessage]);
             }
+
+            const updatedContext = [...context, { role: "user", content: inputText }];
     
-            const response = await axios.post('https://juancito-node-7edb1ddade3b.herokuapp.com/juancito', { message: inputText });
+            const response = await axios.post('https://yourusername.pythonanywhere.com/juancito', { message: inputText, context: updatedContext });
             setMessages(prev => [...prev, { user: 'Juancito', text: response.data.response }]);
+            setContext(response.data.context); // Update context with the latest conversation history
         } catch (error) {
             console.error('Error:', error);
         }
         setInputText('');
     };
     
-    const handleKeyPress = (e) => {
+    const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             sendMessage();
         }
     };
+
     return (
         <div className="app-container">
             <div className="teacher-image">
                 <img src="./juancito.png" alt="Juancito" />
                 <div className="teacher-title">Juancito</div>
-                
             </div>
             <div className="chat-container">
-            <div className="user-info">
-                <p>Username: {user.name}</p>
-                <p>Language Level: {user.languageLevel}</p>
-            </div>
+                <div className="user-info">
+                    <p>Username: {user.name}</p>
+                    <p>Language Level: {user.languageLevel}</p>
+                </div>
                 <div className="chat-box">
                     <div className="chat-messages">
                         {messages.map((msg, index) => (
@@ -82,7 +85,7 @@ function ChatApp() {
                         ))}
                     </div>
                     <div className="chat-input">
-                        <input type="text" value={inputText} onChange={e => setInputText(e.target.value)} onKeyPress={handleKeyPress} />
+                        <input type="text" value={inputText} onChange={e => setInputText(e.target.value)} onKeyDown={handleKeyDown} />
                         <button onClick={sendMessage}>Send</button>
                     </div>
                 </div>
