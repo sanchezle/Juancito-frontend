@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ChatApp.css';  // Ensure this path correctly points to your CSS file
 
+// API base URL
+const API_BASE_URL = 'https://luis-dev-lab.com/projects/juancito';
+
 function ChatApp() {
     const [messages, setMessages] = useState([]);
     const [inputText, setInputText] = useState('');
@@ -11,12 +14,15 @@ function ChatApp() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userDataResponse = await axios.get('https://luis-dev-lab.com/projects/juancito');
+                const userDataResponse = await axios.get(`${API_BASE_URL}/userData`);
                 setUser(userDataResponse.data);
                 // Add a greeting message with the user's name
-                setMessages([{ user: 'Juancito', text: `Hola ${userDataResponse.data.name}, ¿cómo puedo ayudarte a aprender español hoy?` }]);
+                setMessages([{ user: 'Juancito', text: `Hola ${userDataResponse.data.name || 'amigo'}, ¿cómo puedo ayudarte a aprender español hoy?` }]);
             } catch (error) {
                 console.error('Error fetching user data:', error);
+                // Set default user data if fetch fails
+                setUser({ name: 'amigo', languageLevel: 'beginner' });
+                setMessages([{ user: 'Juancito', text: `Hola amigo, ¿cómo puedo ayudarte a aprender español hoy?` }]);
             }
         };
 
@@ -24,11 +30,14 @@ function ChatApp() {
 
         const fetchInitialMessage = async () => {
             try {
-                const response = await axios.get('https://luis-dev-lab.com/projects/juancito');
-                setMessages([{ user: 'Juancito', text: response.data.response }]);
+                const response = await axios.get(`${API_BASE_URL}/initialMessage`);
+                // Only set this message if we don't already have a greeting
+                if (messages.length === 0) {
+                    setMessages([{ user: 'Juancito', text: response.data.message }]);
+                }
             } catch (error) {
                 console.error('Error fetching initial message:', error);
-                // Optionally handle the error in the UI
+                // Initial message already set in fetchUserData, so we can ignore this error
             }
         };
 
@@ -36,6 +45,8 @@ function ChatApp() {
     }, []);
 
     const sendMessage = async () => {
+        if (!inputText.trim()) return; // Don't send empty messages
+        
         try {
             const newMessage = { user: 'You', text: inputText };
     
@@ -44,7 +55,7 @@ function ChatApp() {
             
             // If this is the first message and no greeting has been sent, add the greeting
             if (messages.length === 0 && !greetingAlreadySent) {
-                const greeting = { user: 'Juancito', text: `Hola ${user.name}, ¿cómo puedo ayudarte a aprender español hoy?` };
+                const greeting = { user: 'Juancito', text: `Hola ${user.name || 'amigo'}, ¿cómo puedo ayudarte a aprender español hoy?` };
                 setMessages([greeting, newMessage]);
             } else {
                 setMessages([...messages, newMessage]);
@@ -52,11 +63,13 @@ function ChatApp() {
 
             const updatedContext = [...context, { role: "user", content: inputText }];
     
-            const response = await axios.post('https://yourusername.pythonanywhere.com/juancito', { message: inputText, context: updatedContext });
+            const response = await axios.post(`${API_BASE_URL}`, { message: inputText, context: updatedContext });
             setMessages(prev => [...prev, { user: 'Juancito', text: response.data.response }]);
             setContext(response.data.context); // Update context with the latest conversation history
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error sending message:', error);
+            // Handle error in UI
+            setMessages(prev => [...prev, { user: 'System', text: 'Error connecting to Juancito. Please try again later.' }]);
         }
         setInputText('');
     };
@@ -70,13 +83,13 @@ function ChatApp() {
     return (
         <div className="app-container">
             <div className="teacher-image">
-                <img src="./juancito.png" alt="Juancito" />
+                <img src="/juancito.png" alt="Juancito" />
                 <div className="teacher-title">Juancito</div>
             </div>
             <div className="chat-container">
                 <div className="user-info">
-                    <p>Username: {user.name}</p>
-                    <p>Language Level: {user.languageLevel}</p>
+                    <p>Username: {user.name || 'Guest'}</p>
+                    <p>Language Level: {user.languageLevel || 'Not specified'}</p>
                 </div>
                 <div className="chat-box">
                     <div className="chat-messages">
@@ -85,7 +98,13 @@ function ChatApp() {
                         ))}
                     </div>
                     <div className="chat-input">
-                        <input type="text" value={inputText} onChange={e => setInputText(e.target.value)} onKeyDown={handleKeyDown} />
+                        <input 
+                            type="text" 
+                            value={inputText} 
+                            onChange={e => setInputText(e.target.value)} 
+                            onKeyDown={handleKeyDown}
+                            placeholder="Type your message here..."
+                        />
                         <button onClick={sendMessage}>Send</button>
                     </div>
                 </div>
