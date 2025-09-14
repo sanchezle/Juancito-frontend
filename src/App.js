@@ -27,22 +27,24 @@ function ChatApp() {
         };
 
         fetchUserData();
+    }, []); // No dependencies for initial user data load
 
-        const fetchInitialMessage = async () => {
-            try {
-                const response = await axios.get(`${API_BASE_URL}/initialMessage`);
-                // Only set this message if we don't already have a greeting
-                if (messages.length === 0) {
+    useEffect(() => {
+        // Only fetch initial message if no messages exist yet
+        if (messages.length === 0) {
+            const fetchInitialMessage = async () => {
+                try {
+                    const response = await axios.get(`${API_BASE_URL}/initialMessage`);
                     setMessages([{ user: 'Juancito', text: response.data.message }]);
+                } catch (error) {
+                    console.error('Error fetching initial message:', error);
+                    // If this fails, the greeting from fetchUserData will remain
                 }
-            } catch (error) {
-                console.error('Error fetching initial message:', error);
-                // Initial message already set in fetchUserData, so we can ignore this error
-            }
-        };
-
-        fetchInitialMessage();
-    }, []);
+            };
+            
+            fetchInitialMessage();
+        }
+    }, [messages.length]); // This is safe now because we only execute when messages.length === 0
 
     const sendMessage = async () => {
         if (!inputText.trim()) return; // Don't send empty messages
