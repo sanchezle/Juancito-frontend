@@ -11,7 +11,7 @@ function ChatApp() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userDataResponse = await axios.get('https://yourusername.pythonanywhere.com/userData');
+                const userDataResponse = await axios.get('https://luis-dev-lab.com/projects/juancito');
                 setUser(userDataResponse.data);
                 // Add a greeting message with the user's name
                 setMessages([{ user: 'Juancito', text: `Hola ${userDataResponse.data.name}, ¿cómo puedo ayudarte a aprender español hoy?` }]);
