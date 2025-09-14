@@ -24,7 +24,7 @@ function ChatApp() {
 
         const fetchInitialMessage = async () => {
             try {
-                const response = await axios.get('https://yourusername.pythonanywhere.com/initialMessage');
+                const response = await axios.get('https://luis-dev-lab.com/projects/juancito');
                 setMessages([{ user: 'Juancito', text: response.data.response }]);
             } catch (error) {
                 console.error('Error fetching initial message:', error);
